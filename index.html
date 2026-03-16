@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>homis</title>
+  <meta name="description" content="Connect with neighbors, discover local events, shop the marketplace, and find trusted local businesses — all in one app.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23454545'/><circle cx='50' cy='54' r='26' fill='white'/><circle cx='50' cy='54' r='14' fill='%23454545'/><polygon points='50,16 38,36 62,36' fill='%23F5A623'/></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:        #080808;
+      --surface:   #0f0f0f;
+      --surface2:  #131313;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #F5A623;
+      --cyan:      #00BCE5;
+      --green:     #23D2C3;
+      --muted:     rgba(255,255,255,0.38);
+      --subtle:    rgba(255,255,255,0.1);
+    }
+
+    html, body {
+      overflow-x: hidden;
+    }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: "DM Sans", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      background: rgba(8,8,8,0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.3s ease;
+    }
+
+    .nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo img { height: 30px; width: auto; display: block; }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.52);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 11px 26px;
+      border-radius: 100px;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(245,166,35,0.3); }
+
+    /* ─── HERO ────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 48px 100px;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1440px;
+      display: grid;
+      grid-template-columns: 48% 52%;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .hero-phone {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-phone .phone-glow {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(245,166,35,0.22) 0%, transparent 68%);
+      filter: blur(60px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-phone img {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 48px 80px rgba(0,0,0,0.55));
+      border-radius: 40px;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-badge {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,166,35,0.1);
+      border: 1px solid rgba(245,166,35,0.22);
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 28px;
+      letter-spacing: 0.01em;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1.hero-title {
+      position: relative;
+      z-index: 2;
+      font-family: "Inter Tight", system-ui, sans-serif;
+      font-size: clamp(56px, 6vw, 96px);
+      font-weight: 900;
+      line-height: 1.03;
+      letter-spacing: -0.035em;
+      color: #fff;
+      max-width: 960px;
+      margin-bottom: 22px;
+    }
+
+    .hero-title .hl {
+      background: linear-gradient(120deg, #F5A623 0%, #FFD080 55%, #F5A623 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      position: relative;
+      z-index: 2;
+      font-size: clamp(18px, 1.8vw, 22px);
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 14px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 0;
+    }
+
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 32px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: "Inter Tight", sans-serif;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .btn-store.primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-store.primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(245,166,35,0.38);
+    }
+
+    .btn-store.secondary {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.13);
+      color: #fff;
+    }
+    .btn-store.secondary:hover {
+      background: rgba(255,255,255,0.11);
+      transform: translateY(-1px);
+    }
+
+    .btn-store svg { flex-shrink: 0; }
+
+    /* Waitlist form */
+    .waitlist-form {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      margin-bottom: 0;
+      max-width: 480px;
+      width: 100%;
+    }
+    .waitlist-form input[type="email"] {
+      flex: 2;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 100px;
+      outline: none;
+      padding: 15px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      min-width: 0;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .waitlist-form input[type="email"]:focus {
+      border-color: rgba(245,166,35,0.4);
+      background: rgba(255,255,255,0.1);
+    }
+    .waitlist-form input[type="email"]::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+    .waitlist-form button {
+      flex-shrink: 0;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 100px;
+      padding: 15px 28px;
+      font-family: "Inter Tight", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+      white-space: nowrap;
+    }
+    .waitlist-form button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 32px rgba(245,166,35,0.4);
+    }
+    .waitlist-success {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 28px;
+      margin-bottom: 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--green);
+      font-weight: 500;
+    }
+    .waitlist-success .checkmark {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(35,210,195,0.15);
+      border: 1px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+    }
+
+    /* ─── APP SCREENS ────────────────────────────────────── */
+    .app-screens {
+      padding: 100px 48px 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .app-screens h2 {
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(36px, 4vw, 60px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+
+    .app-screens p {
+      font-size: clamp(16px, 1.5vw, 19px);
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 540px;
+      margin: 0 auto 64px;
+    }
+
+    .app-screens-img {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: block;
+      border-radius: 20px 20px 0 0;
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    }
+
+    /* ─── STATS ───────────────────────────────────────────── */
+    .stats-bar {
+      position: relative;
+      padding: 64px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stats-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(48px, 5vw, 72px);
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* ─── SHARED SECTION STYLES ───────────────────────────── */
+    .section-divider {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider-wrap { padding: 0 48px; }
+
+    /* ─── FEATURE CARDS GRID ──────────────────────────────── */
+    .features-overview {
+      padding: 120px 48px;
+      position: relative;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .section-head h2, .feature-content h2 {
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(40px, 4.5vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.07;
+      color: #fff;
+    }
+
+    .cards-grid {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .feat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px 24px;
+      transition: border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      cursor: default;
+    }
+
+    .feat-card:hover {
+      border-color: rgba(245,166,35,0.25);
+      transform: translateY(-5px);
+    }
+
+    .feat-card:nth-child(2):hover { border-color: rgba(0,188,229,0.25); }
+    .feat-card:nth-child(3):hover { border-color: rgba(35,210,195,0.25); }
+
+    .card-ico {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 22px;
+    }
+
+    .card-ico.amber { background: rgba(245,166,35,0.12); }
+    .card-ico.cyan  { background: rgba(0,188,229,0.12); }
+    .card-ico.green { background: rgba(35,210,195,0.12); }
+    .card-ico.rose  { background: rgba(255,100,100,0.1); }
+
+    .feat-card h3 {
+      font-family: "Inter Tight", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .feat-card p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    /* ─── FEATURE ROW SECTIONS ────────────────────────────── */
+    .feature-row {
+      padding: 120px 48px;
+      position: relative;
+    }
+
+    .feature-row-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 58% 42%;
+      gap: 64px;
+      align-items: center;
+    }
+
+    /* flip: text first (42%), mockup second (58%) */
+    .feature-row-inner.flip {
+      grid-template-columns: 42% 58%;
+    }
+
+    .feature-content { max-width: 560px; }
+
+    .feature-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .feature-label.cyan-label { color: var(--cyan); }
+    .feature-label.green-label { color: var(--green); }
+
+    .feature-content h2 { margin-bottom: 18px; }
+
+    .feature-content p {
+      font-size: 19px;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 100px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Mockup wrapper */
+    .mockup-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mockup-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .mockup-wrap img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 48px 80px rgba(0,0,0,0.7));
+    }
+
+    .mockup-wrap img.portrait-frame {
+      max-width: 400px;
+      border-radius: 40px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    /* ─── DOWNLOAD CTA ────────────────────────────────────── */
+    .download-section {
+      padding: 60px 48px 140px;
+    }
+
+    .download-card {
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: #121212;
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 36px;
+      padding: 96px 64px;
+      text-align: center;
+    }
+
+    .download-card h2 {
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      line-height: 1.04;
+      color: #fff;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-card p {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 52px;
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .store-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .store-btn-dl {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 14px 28px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.2s ease;
+    }
+
+    .store-btn-dl:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(245,166,35,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .store-ico { font-size: 30px; line-height: 1; }
+    .store-text { text-align: left; }
+    .store-text .sm { font-size: 11px; color: var(--muted); display: block; margin-bottom: 2px; }
+    .store-text .lg { font-family: "Inter Tight", sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+
+    /* ─── CONTACT ─────────────────────────────────────────── */
+    .contact-section {
+      padding: 100px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .contact-inner .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .contact-inner h2 {
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(36px, 4vw, 58px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1.08;
+      margin-bottom: 14px;
+    }
+
+    .contact-inner > p {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 52px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .contact-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.01em;
+    }
+
+    .contact-field input,
+    .contact-field textarea,
+    .contact-field select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: rgba(245,166,35,0.45);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .contact-field input::placeholder,
+    .contact-field textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .contact-field textarea {
+      resize: vertical;
+      min-height: 140px;
+      line-height: 1.6;
+    }
+
+    .contact-submit {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .contact-submit button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 40px;
+      font-family: "Inter Tight", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+
+    .contact-submit button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 36px rgba(245,166,35,0.38);
+    }
+
+    .contact-submit button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .contact-success {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 24px;
+      background: rgba(35,210,195,0.08);
+      border: 1px solid rgba(35,210,195,0.2);
+      border-radius: 14px;
+      margin-top: 8px;
+    }
+
+    .contact-success .cs-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(35,210,195,0.15);
+      border: 1px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+
+    .contact-success p {
+      font-size: 15px;
+      color: var(--green);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 48px;
+    }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .footer-logo img { height: 26px; }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.65); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.18);
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+    .fade-up.in { opacity: 1; transform: translateY(0); will-change: auto; }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-inner, .stats-inner, .cards-grid { padding-left: 24px; padding-right: 24px; }
+      .stats-inner { grid-template-columns: 1fr; gap: 32px; }
+      .cards-grid { grid-template-columns: repeat(2,1fr); }
+      .feature-row-inner { grid-template-columns: 1fr; gap: 52px; }
+      .feature-row-inner.flip { direction: ltr; }
+      .feature-content { max-width: 100%; }
+      .download-card { padding: 60px 32px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (max-width: 540px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .hero { padding: 128px 24px 0; }
+      .feature-row, .features-overview { padding: 80px 24px; }
+      .download-section { padding: 48px 24px 100px; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="particleCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+<!-- ─── NAVIGATION ────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><img src="homis_white.png" alt="hômis" /></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#chat">Community</a></li>
+      <li><a href="#marketplace">Marketplace</a></li>
+      <li><a href="#offers">Offers</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#download" class="nav-cta">Get the App</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="hero">
+  <!-- Background glows -->
+  <div class="glow-orb" style="width:900px;height:600px;background:radial-gradient(ellipse,rgba(245,166,35,0.12) 0%,transparent 68%);top:-80px;left:50%;transform:translateX(-50%);filter:blur(80px);"></div>
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(0,188,229,0.07) 0%,transparent 70%);top:20%;right:-150px;filter:blur(70px);"></div>
+  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(35,210,195,0.06) 0%,transparent 70%);bottom:20%;left:-100px;filter:blur(60px);"></div>
+
+  <div class="hero-inner">
+    <!-- Left: text + actions -->
+    <div class="hero-content">
+      <div class="hero-badge fade-up">
+        <span class="dot"></span>
+        Coming soon to iOS &amp; Android
+      </div>
+
+      <h1 class="hero-title fade-up d1">
+        Where neighbors<br>become <span class="hl">community</span>
+      </h1>
+
+      <p class="hero-sub fade-up d2">
+        Chat with your neighbors, discover local events, shop the marketplace, and unlock exclusive deals from trusted local businesses.
+      </p>
+
+      <div class="hero-actions fade-up d3">
+        <a href="#download" class="btn-store primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          App Store
+        </a>
+        <a href="#download" class="btn-store secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3.18 23.76c.3.17.64.19.96.08l12.75-7.36-2.76-2.76-10.95 10.04zM.85 1.19C.32 1.53 0 2.1 0 2.77v18.45c0 .68.32 1.24.85 1.59l.09.07L11.06 12.2v-.38L.93 1.13l-.08.06zM20.42 10.33l-2.98-1.72-3.09 3.09 3.09 3.1 3-1.73c.85-.49.85-1.28-.02-1.74zM3.18.22L15.93 7.6l-2.76 2.76L2.22.14C2.55-.04 2.88-.07 3.18.22z"/>
+          </svg>
+          Google Play
+        </a>
+      </div>
+
+      <form class="waitlist-form fade-up d4" id="waitlistForm" onsubmit="handleWaitlist(event)">
+        <input type="email" placeholder="Enter your email" required autocomplete="email" />
+        <button type="submit">Join Waitlist</button>
+      </form>
+      <div class="waitlist-success" id="waitlistSuccess">
+        <span class="checkmark">✓</span>
+        You're on the list — we'll be in touch!
+      </div>
+    </div>
+
+    <!-- Right: phone mockup -->
+    <div class="hero-phone fade-up d2">
+      <div class="phone-glow"></div>
+      <img src="mockups/home2.png" alt="hômis home screen" />
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ──────────────────────────────────────────────── -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item fade-up">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Active communities</div>
+    </div>
+    <div class="stat-item fade-up d1">
+      <div class="stat-num">10k+</div>
+      <div class="stat-label">Neighbors connected</div>
+    </div>
+    <div class="stat-item fade-up d2">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Trusted local partners</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FEATURE CARDS ─────────────────────────────────────── -->
+<section class="features-overview" id="features">
+  <div class="glow-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(245,166,35,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(60px);"></div>
+
+  <div class="section-head fade-up">
+    <span class="eyebrow">Everything you need</span>
+    <h2>Your neighborhood,<br>in one place</h2>
+  </div>
+
+  <div class="cards-grid">
+    <div class="feat-card fade-up">
+      <div class="card-ico amber">💬</div>
+      <h3>Community Chat</h3>
+      <p>Real-time group chat for your building. Ask for help, share tips, and stay in the loop with your neighbors.</p>
+    </div>
+    <div class="feat-card fade-up d1">
+      <div class="card-ico cyan">📅</div>
+      <h3>Local Events</h3>
+      <p>Discover what's happening nearby. RSVP to neighborhood gatherings and never miss out on local happenings.</p>
+    </div>
+    <div class="feat-card fade-up d2">
+      <div class="card-ico green">🛍️</div>
+      <h3>Marketplace</h3>
+      <p>Buy, sell, and trade with people next door. From goods to services — your trusted neighborhood marketplace.</p>
+    </div>
+    <div class="feat-card fade-up d3">
+      <div class="card-ico rose">⭐</div>
+      <h3>Local Offers</h3>
+      <p>Exclusive deals from verified local businesses — available only for your community members.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider-wrap"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE: CHAT ─────────────────────────────────────── -->
+<section class="feature-row" id="chat">
+  <div class="feature-row-inner">
+    <div class="mockup-wrap fade-up">
+      <div class="mockup-glow" style="width:520px;height:520px;background:radial-gradient(circle,rgba(245,166,35,0.22) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <img src="mockups/chat-hand-trans.png" alt="Community chat on hômis" />
+    </div>
+    <div class="feature-content fade-up d2">
+      <div class="feature-label">✦ Community Chat</div>
+      <h2>Your neighbors<br>are one message<br>away</h2>
+      <p>Real-time group chat for your whole building or neighborhood. Ask to borrow something, report a suspicious package, or just say hello.</p>
+      <div class="pills">
+        <span class="pill">🏘️ Building-wide chat</span>
+        <span class="pill">💬 Direct messages</span>
+        <span class="pill">📌 Community feed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-wrap"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE: MARKETPLACE goods ───────────────────────── -->
+<section class="feature-row" id="marketplace">
+  <div class="feature-row-inner flip">
+    <div class="feature-content fade-up d2">
+      <div class="feature-label cyan-label">✦ Marketplace — Goods</div>
+      <h2>Buy &amp; sell with<br>people you trust</h2>
+      <p>A neighborhood marketplace for goods. List what you have, find what you need — from people right on your block.</p>
+      <div class="pills">
+        <span class="pill">📦 List in seconds</span>
+        <span class="pill">🔒 Neighbors only</span>
+        <span class="pill">🖼️ Photo listings</span>
+      </div>
+    </div>
+    <div class="mockup-wrap fade-up">
+      <div class="mockup-glow" style="width:520px;height:520px;background:radial-gradient(circle,rgba(0,188,229,0.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <img src="mockups/marketplace-goods-2screens-trans.png" alt="Marketplace goods" />
+    </div>
+  </div>
+</section>
+
+<div class="divider-wrap"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE: MARKETPLACE services ────────────────────── -->
+<section class="feature-row">
+  <div class="feature-row-inner">
+    <div class="mockup-wrap fade-up">
+      <div class="mockup-glow" style="width:520px;height:520px;background:radial-gradient(circle,rgba(35,210,195,0.16) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <img src="mockups/marketplace-services-2screens-transp.png" alt="Marketplace services" />
+    </div>
+    <div class="feature-content fade-up d2">
+      <div class="feature-label green-label">✦ Marketplace — Services</div>
+      <h2>Hire talented<br>neighbors nearby</h2>
+      <p>Need a dog walker, personal trainer, or handyman? Find trusted service providers who actually live in your community.</p>
+      <div class="pills">
+        <span class="pill">🐕 Dog walking</span>
+        <span class="pill">💪 Fitness & wellness</span>
+        <span class="pill">🔧 Home services</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-wrap"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE: OFFERS ───────────────────────────────────── -->
+<section class="feature-row" id="offers">
+  <div class="feature-row-inner flip">
+    <div class="feature-content fade-up d2">
+      <div class="feature-label">✦ Local Offers</div>
+      <h2>Exclusive deals<br>from local partners</h2>
+      <p>Handpicked offers from verified businesses in your area. Dining, cleaning, fitness, and more — only for verified community members.</p>
+      <div class="pills">
+        <span class="pill">🏷️ Community-only deals</span>
+        <span class="pill">🤝 Trusted Partners</span>
+        <span class="pill">📍 Hyper-local</span>
+      </div>
+    </div>
+    <div class="mockup-wrap fade-up">
+      <div class="mockup-glow" style="width:520px;height:520px;background:radial-gradient(circle,rgba(245,166,35,0.2) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <img src="mockups/offers-2screens-trans.png" alt="Local offers on hômis" />
+    </div>
+  </div>
+</section>
+
+<div class="divider-wrap"><div class="section-divider"></div></div>
+
+<!-- ─── FEATURE: PROFILE ──────────────────────────────────── -->
+<section class="feature-row">
+  <div class="feature-row-inner">
+    <div class="mockup-wrap fade-up">
+      <div class="mockup-glow" style="width:420px;height:420px;background:radial-gradient(circle,rgba(245,166,35,0.16) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <img src="mockups/profile-trans.png" alt="User profile on hômis" style="max-width:50%;" />
+    </div>
+    <div class="feature-content fade-up d2">
+      <div class="feature-label">✦ Your Profile</div>
+      <h2>Be a known<br>neighbor</h2>
+      <p>Build your community presence. Share a little about yourself, connect your social links, and earn points as you contribute to your neighborhood.</p>
+      <div class="pills">
+        <span class="pill">⭐ Earn community points</span>
+        <span class="pill">👤 Rich profiles</span>
+        <span class="pill">🔗 Social links</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── APP SCREENS ──────────────────────────────────────── -->
+<section class="app-screens" id="app-screens">
+  <h2 class="fade-up">Everything you need,<br>in one place</h2>
+  <p class="fade-up d1">From neighborhood chats to local deals, hômis brings your community together.</p>
+  <img class="app-screens-img fade-up d2" src="mockups/all-screens.jpg" alt="hômis app screens showcase" />
+</section>
+
+<!-- ─── DOWNLOAD CTA ───────────────────────────────────────── -->
+<section class="download-section" id="download">
+  <div class="download-card">
+    <!-- Glow effects inside card -->
+    <div class="glow-orb" style="width:700px;height:500px;background:radial-gradient(ellipse,rgba(245,166,35,0.18) 0%,transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(80px);"></div>
+    <div class="glow-orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(0,188,229,0.12) 0%,transparent 70%);top:-40px;right:40px;filter:blur(60px);"></div>
+    <div class="glow-orb" style="width:250px;height:250px;background:radial-gradient(circle,rgba(35,210,195,0.08) 0%,transparent 70%);bottom:0;left:60px;filter:blur(50px);"></div>
+
+    <h2 class="fade-up">Your neighborhood<br>is waiting.</h2>
+    <p class="fade-up d1">Download hômis free and join your community today.</p>
+    <div class="store-btns fade-up d2">
+      <a href="#" class="store-btn-dl">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#A8A8A8" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+        </svg>
+        <div class="store-text">
+          <span class="sm">Download on the</span>
+          <span class="lg">App Store</span>
+        </div>
+      </a>
+      <a href="#" class="store-btn-dl">
+        <div class="store-ico">▶</div>
+        <div class="store-text">
+          <span class="sm">Get it on</span>
+          <span class="lg">Google Play</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ──────────────────────────────────────────── -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="section-label fade-up">Get in touch</div>
+    <h2 class="fade-up d1">Say hello</h2>
+    <p class="fade-up d2">Have a question, partnership idea, or just want to know more? Drop us a message and we'll get back to you.</p>
+
+    <form class="contact-form fade-up d3" id="contactForm" onsubmit="handleContact(event)">
+      <div class="contact-row">
+        <div class="contact-field">
+          <label for="cf-name">Name</label>
+          <input type="text" id="cf-name" name="name" placeholder="Your name" required />
+        </div>
+        <div class="contact-field">
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" name="email" placeholder="you@example.com" required />
+        </div>
+      </div>
+      <div class="contact-field">
+        <label for="cf-subject">Subject</label>
+        <input type="text" id="cf-subject" name="subject" placeholder="What's this about?" required />
+      </div>
+      <div class="contact-field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="Tell us more…" required></textarea>
+      </div>
+      <div class="contact-submit">
+        <button type="submit" id="contactBtn">Send Message</button>
+      </div>
+    </form>
+
+    <div class="contact-success" id="contactSuccess">
+      <span class="cs-icon">✓</span>
+      <p>Message sent! We'll get back to you at <strong>anton@homis.app</strong> shortly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="homis_white.png" alt="hômis" /></div>
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">For Businesses</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 hômis. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Intersection observer for fade-up animations
+  const obs = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.01, rootMargin: '0px 0px 0px 0px' }
+  );
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Immediately reveal hero elements
+  setTimeout(() => {
+    document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('in'));
+  }, 80);
+
+  // ── Particle background (desktop only) ──────────────────
+  (function () {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', () => {
+      resize();
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        ctx.clearRect(0, 0, W, H);
+      }
+    });
+    resize();
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    function makeParticle() {
+      return {
+        x:     rand(0, W),
+        y:     rand(0, H),
+        r:     rand(1, 2.8),
+        alpha: rand(0.15, 0.55),
+        speedX: rand(-0.25, 0.25),
+        speedY: rand(-0.55, -0.15),   // drift upward
+        wobble: rand(0, Math.PI * 2),
+        wobbleSpeed: rand(0.005, 0.018),
+        wobbleAmp:   rand(0.2, 0.7),
+      };
+    }
+
+    particles = Array.from({ length: 55 }, makeParticle);
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(245,166,35,${p.alpha})`;
+        ctx.fill();
+
+        // update
+        p.wobble  += p.wobbleSpeed;
+        p.x       += p.speedX + Math.sin(p.wobble) * p.wobbleAmp;
+        p.y       += p.speedY;
+
+        // reset when off-screen
+        if (p.y < -6 || p.x < -6 || p.x > W + 6) {
+          p.x     = rand(0, W);
+          p.y     = H + rand(0, 20);
+          p.alpha = rand(0.15, 0.55);
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  async function handleContact(e) {
+    e.preventDefault();
+    const btn  = document.getElementById('contactBtn');
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('contactSuccess');
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const data = new FormData(form);
+
+    try {
+      // Replace YOUR_FORM_ID with your Formspree form ID (formspree.io)
+      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'flex';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+      alert('Could not send. Please email us directly at anton@homis.app');
+    }
+  }
+
+  function handleWaitlist(e) {
+    e.preventDefault();
+    const form = document.getElementById('waitlistForm');
+    const success = document.getElementById('waitlistSuccess');
+    form.style.display = 'none';
+    success.style.display = 'flex';
+  }
+</script>
+
+</body>
+</html>

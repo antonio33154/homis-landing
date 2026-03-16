@@ -1,0 +1,7 @@
+node_modules/
+temporary screenshots/
+screenshots/
+.DS_Store
+._*
+._.DS_Store
+.claude/
