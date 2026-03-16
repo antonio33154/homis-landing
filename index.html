@@ -265,11 +265,11 @@
     .platform-badge {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       background: #000;
       border: 1px solid rgba(255,255,255,0.22);
-      border-radius: 12px;
-      padding: 10px 20px;
+      border-radius: 8px;
+      padding: 6px 12px;
       text-decoration: none;
       color: #fff;
       transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -285,13 +285,13 @@
       line-height: 1.2;
     }
     .platform-badge-text .badge-small {
-      font-size: 10px;
+      font-size: 7px;
       font-family: 'DM Sans', sans-serif;
       color: rgba(255,255,255,0.75);
       letter-spacing: 0.02em;
     }
     .platform-badge-text .badge-large {
-      font-size: 18px;
+      font-size: 13px;
       font-family: "Inter Tight", sans-serif;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -1012,10 +1012,25 @@
       .waitlist-inline { max-width: 100%; }
       .platform-icons { justify-content: center; flex-wrap: wrap; }
       .platform-badge { flex: 1; min-width: 140px; justify-content: center; }
-      /* hide desktop phone, show all-screens below on mobile */
+      /* hide desktop phone, show all-screens inline on mobile */
       .hero-phone { display: none; }
-      .hero-screens-mobile { display: block; margin-top: 32px; }
-      .mockup-wrap.mockup-lg img { transform: none; }
+      .hero-screens-mobile { display: block; margin: 24px 0 8px; }
+      /* mockup-lg: full-bleed bigger on mobile */
+      .mockup-wrap.mockup-lg {
+        overflow: hidden;
+        border-radius: 0;
+        width: calc(100% + 48px);
+        margin-left: -24px;
+        margin-right: -24px;
+      }
+      .mockup-wrap.mockup-lg img {
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        border-radius: 0;
+        filter: none;
+      }
 
       /* Stats */
       .stats-inner {
@@ -1141,6 +1156,11 @@
         Chat with your neighbors, discover local events, shop the marketplace, and unlock exclusive deals from trusted local businesses.
       </p>
 
+      <!-- All-screens image: mobile only, sits between subtitle and button -->
+      <div class="hero-screens-mobile fade-up d3">
+        <img src="mockups/all-screens.jpg" alt="hômis app screens" />
+      </div>
+
       <button class="btn-waitlist fade-up d3" id="btnWaitlist" onclick="toggleWaitlist()">
         Join Waitlist
       </button>
@@ -1156,7 +1176,7 @@
 
       <div class="platform-icons fade-up d4">
         <a href="#download" class="platform-badge">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
           </svg>
           <div class="platform-badge-text">
@@ -1165,7 +1185,7 @@
           </div>
         </a>
         <a href="#download" class="platform-badge">
-          <svg width="26" height="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.18 23.76c.3.17.64.19.96.08l12.75-7.36-2.76-2.76-10.95 10.04z" fill="#EA4335"/>
             <path d="M.85 1.19C.32 1.53 0 2.1 0 2.77v18.45c0 .68.32 1.24.85 1.59l.09.07L11.06 12.2v-.38L.93 1.13l-.08.06z" fill="#4285F4"/>
             <path d="M20.42 10.33l-2.98-1.72-3.09 3.09 3.09 3.1 3-1.73c.85-.49.85-1.28-.02-1.74z" fill="#FBBC05"/>
@@ -1186,10 +1206,6 @@
     </div>
   </div>
 
-  <!-- All-screens image for mobile only (below content) -->
-  <div class="hero-screens-mobile fade-up d4">
-    <img src="mockups/all-screens.jpg" alt="hômis app screens" />
-  </div>
 </section>
 
 <!-- ─── STATS ──────────────────────────────────────────────── -->
