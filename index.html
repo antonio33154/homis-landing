@@ -868,23 +868,105 @@
 
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 900px) {
+      /* Nav */
       .nav-links { display: none; }
-      .nav-inner, .stats-inner, .cards-grid { padding-left: 24px; padding-right: 24px; }
-      .stats-inner { grid-template-columns: 1fr; gap: 32px; }
-      .cards-grid { grid-template-columns: repeat(2,1fr); }
-      .feature-row-inner { grid-template-columns: 1fr; gap: 52px; }
-      .feature-row-inner.flip { direction: ltr; }
-      .feature-content { max-width: 100%; }
-      .download-card { padding: 60px 32px; }
-      .footer-inner { flex-direction: column; text-align: center; }
+      .nav-inner { padding: 0 24px; }
+
+      /* Hero — stack to single column */
+      .hero { padding: 100px 24px 64px; }
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        text-align: center;
+      }
+      .hero-content { align-items: center; }
+      .hero-actions { justify-content: center; }
+      .waitlist-form { max-width: 100%; }
+      .hero-phone { order: -1; }
+      .hero-phone img { max-width: 280px; }
+      .hero-phone .phone-glow { width: 280px; height: 280px; }
+
+      /* Stats */
+      .stats-inner {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 0 24px;
+        gap: 0;
+      }
+
+      /* Features overview cards */
+      .features-overview { padding: 80px 24px; }
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0;
+      }
+
+      /* Feature rows */
+      .feature-row { padding: 80px 24px; }
+      .feature-row-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+      .feature-row-inner.flip { grid-template-columns: 1fr; }
+      .feature-content { max-width: 100%; align-items: center; }
+      .feature-content h2 { font-size: clamp(32px, 7vw, 48px); }
+      .mockup-wrap { justify-content: center; }
+      .mockup-wrap img { max-width: 85%; }
+      .mockup-wrap img.portrait-frame { max-width: 260px; }
+      .pills { justify-content: center; }
+
+      /* App screens */
+      .app-screens { padding: 60px 24px 0; }
+
+      /* Download CTA */
+      .download-section { padding: 48px 24px 80px; }
+      .download-card { padding: 56px 28px; border-radius: 24px; }
+      .download-card h2 { font-size: clamp(32px, 8vw, 52px); }
+      .store-btns { gap: 12px; }
+
+      /* Contact */
+      .contact-section { padding: 64px 24px; }
+      .contact-row { grid-template-columns: 1fr; gap: 16px; }
+
+      /* Footer */
+      .footer-inner { flex-direction: column; text-align: center; gap: 20px; }
       .footer-links { flex-wrap: wrap; justify-content: center; }
     }
 
     @media (max-width: 540px) {
+      /* Hero */
+      .hero { padding: 88px 20px 56px; }
+      .hero-phone img { max-width: 240px; }
+      .hero-actions { flex-direction: column; width: 100%; }
+      .btn-store { justify-content: center; width: 100%; }
+      .waitlist-form { flex-direction: column; gap: 10px; }
+      .waitlist-form input[type="email"],
+      .waitlist-form button { width: 100%; border-radius: 100px; }
+
+      /* Stats — stack vertically */
+      .stats-inner { grid-template-columns: 1fr; gap: 8px; }
+      .stat-item { padding: 20px 0; border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+
+      /* Cards — single column */
       .cards-grid { grid-template-columns: 1fr; }
-      .hero { padding: 128px 24px 0; }
-      .feature-row, .features-overview { padding: 80px 24px; }
-      .download-section { padding: 48px 24px 100px; }
+
+      /* Feature rows */
+      .feature-row { padding: 60px 20px; }
+      .feature-row-inner { gap: 32px; }
+
+      /* Download */
+      .download-section { padding: 32px 20px 64px; }
+      .download-card { padding: 44px 20px; }
+      .store-btns { flex-direction: column; align-items: center; }
+      .store-btn-dl { width: 100%; max-width: 280px; justify-content: center; }
+
+      /* Contact */
+      .contact-section { padding: 48px 20px; }
+
+      /* Footer */
+      .footer-inner { padding: 0 20px; }
+      footer { padding: 36px 20px; }
     }
   </style>
 </head>
